@@ -1,0 +1,3 @@
+[submodule "synthetizer/lib/arduino-audio-tools"]
+	path = synthetizer/lib/arduino-audio-tools
+	url = https://github.com/pschatzmann/arduino-audio-tools.git
