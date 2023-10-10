@@ -51,8 +51,8 @@ This is done in order to do a musical art experience and to go to Ars Electronic
 - [x] Test the electronic filter for the touch interaction
 - [x] Test the sound amplification circuit
 - [x] Build a prototyping PCB
-- [] Build a software embedded synthesizer
-- [] Do sonification with the prototyping PCB
-- [] Build the "Internet"
-- [] Build the final PCB
-- [] Build the MAX plugin for professional sonification on server
+- [ ] Build a software embedded synthesizer
+- [ ] Do sonification with the prototyping PCB
+- [ ] Build the "Internet"
+- [ ] Build the final PCB
+- [ ] Build the MAX plugin for professional sonification on server
