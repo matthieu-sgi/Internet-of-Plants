@@ -1,7 +1,7 @@
 #ifndef SYNTHETIZER_H
 #define SYNTHETIZER_H
 
-#include "../arduino-audio-tools/include/AudioTools.h"
+#include "includes.h"
 #include "../include/sound_hex.h"
 
 
@@ -16,8 +16,8 @@ StreamCopy copier(out, sound);                             // copies sound into 
 
 
 
-void synthetiser_setup(audio_tools::Print synthe_serial);
-void synthetiser_loop();
+void synthetizer_setup(HardwareSerial synthe_serial);
+void synthetizer_loop();
 
 
 #endif
