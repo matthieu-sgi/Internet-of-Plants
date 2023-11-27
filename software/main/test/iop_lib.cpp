@@ -1,6 +1,6 @@
 // #include <Arduino.h>
 // #include <WiFi.h>
-#include "formatted_file.h"
+#include "iop_lib.h"
 
 #define BUFFER_SIZE 400
 #define LED_PWM_PIN 17
@@ -33,28 +33,20 @@ float old_sum_normalized;
 float normalized_data[sweep_data_size];
 
 
-// float average(int* data, int size){
-//   int sum = 0;
-//   for(int i = 0; i < size; i++){
-//     sum += data[i];
-//   }
-//   return sum / size;
-// }
-
-// float average(int** data, int size){
-//   float sum = 0;
-//   for(int i = 0; i < size; i++){
-//     sum += average(data[i], sweep_data_size);
-//   }
-//   return sum / size;
-// }
-
 float average_custom(float* data, int size){
   float sum = 0;
   for(int i = 0; i < size; i++){
     sum += data[i];
   }
   return sum / size;
+}
+
+void basic_function(int* data, int size){
+  data[0] += 1;
+}
+
+void basic_function(float* data, int size){
+  data[0] += 1;
 }
 
 
@@ -83,13 +75,12 @@ float sum_custom(float* data, int size){
   return sum;
 }
 
-
 void ema_update(float* ema, int* data, int size){
-
+  // float alpha = 0.95;
   for(int i = 0; i<size; i++){
     ema[i] = ema[i] * alpha + (1-alpha)*data[i];
   }
-
+  // return ema;
 
 }
 

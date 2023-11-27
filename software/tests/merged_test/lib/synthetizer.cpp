@@ -1,7 +1,7 @@
 #include "synthetizer.h"
 
 
-void synthetiser_setup(audio_tools::Print synthe_serial){
+void synthetizer_setup(HardwareSerial synthe_serial){
 
     AudioLogger::instance().begin(synthe_serial, AudioLogger::Warning);
    // start I2S
