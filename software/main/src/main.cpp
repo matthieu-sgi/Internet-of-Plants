@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
+#include "esp_heap_caps.h"
+
 
 #define BUFFER_SIZE 400
 #define LED_PWM_PIN 17
@@ -8,10 +10,10 @@
 #define FREQ_STEP 1
 #define ANALOG_PIN 34
 
-const char* ssid = "4D-Space";
-const char* password = "CestPasRFIci42";
+const char* ssid = "UnknownV2";
+const char* password = "UbuntuSUDO";
 
-const char* host = "10.1.65.13";
+const char* host = "192.168.124.6";
 const int port = 13000;
 
 WiFiClient server; // TCP server  
@@ -85,7 +87,7 @@ void setup() {
 
   Serial.println("Connected to WiFi network");
 
-  // Connect to TCP server
+  // // // Connect to TCP server
   if(!server.connect(host, port)){
     Serial.println("Connection to TCP server failed");
     return;
@@ -119,7 +121,7 @@ void setup() {
 
 void sweep(int* data, int size){
   int value = 0;
-  for(int index = 0; index <= size; index += FREQ_STEP){
+  for(int index = 0; index < size; index += FREQ_STEP){
     value = analogRead(ANALOG_PIN);
     data[index] = value;
     int freq = MIN_FREQ + index * FREQ_STEP;
@@ -169,19 +171,22 @@ void ema_std_update(int* data, int size,float* ema_std, float* ema){
 
 
 
-
+size_t full_space = heap_caps_get_total_size(MALLOC_CAP_DEFAULT);
 
 
 void loop() {
   // put your main code here, to run repeatedly:
+
   if(!server.connected()){
     Serial.println("Connection to TCP server lost");
     delay(1000);
     server.connect(host, port);
     return;
   }
+  server.flush();
+  // analog.read(ANALOG_PIN);
   sweep(swept_data, sweep_data_size);
-  // new_average = average(swept_data, sweep_data_size);
+  // // new_average = average(swept_data, sweep_data_size);
   ema_update(ema, swept_data, sweep_data_size);
   ema_std_update(swept_data, sweep_data_size, ema_std, ema);
 
@@ -190,30 +195,48 @@ void loop() {
   float avg = average(normalized_data, sweep_data_size);
   float standard_dev = standard_deviation(normalized_data, sweep_data_size,avg);
 
+
   float sum_swept_data = sum(normalized_data, sweep_data_size);
   float diff = abs(sum_swept_data - old_sum_normalized);
-  int threshed_value =  (diff > 90.0) ? 1 : 0;
-  Serial.print("Sum: ");
-  Serial.println(sum_swept_data);
-  Serial.print("Diff: ");
-  Serial.println(diff);
+  int threshed_value =  (diff > 90.0) ? true : false;
+//   // Serial.print("Sum: ");
+//   // Serial.println(sum_swept_data);
+//   // Serial.print("Diff: ");
+//   // Serial.println(diff);
 
-  // normalize data
-  /*
+//   // normalize data
+//   /*
 
-  float anorm = standard_deviation(normalized_data, sweep_data_size);
-*/
+//   float anorm = standard_deviation(normalized_data, sweep_data_size);
+// */
+//   float sum_swept_data = 300.123213;
+//   float standard_dev = 300.123213;
+//   bool threshed_value = false;
+  
+  // Serial.print("Full space : ");
+  // heap_caps_print_heap_info(MALLOC_CAP_DEFAULT);
+  // Serial.println(full_space);
+  // Serial.print("free space : ");
+  // Serial.println(ram_usage);
+  // Serial.println("Sum | threshed_value | standard_dev");
+  // std::string message_string = std::to_string(sum_swept_data) + " " + std::to_string(threshed_value) + " " + std::to_string(standard_dev) + " ;\n";
+  String message_string = "0 " + String(sum_swept_data) + " " + String(threshed_value) + " " + String(standard_dev) + " ;\n";
+  // const char* message = message_string.c_str();
+  Serial.println(message_string);
+  // server.print(sum_swept_data);
+  server.write(message_string.c_str(), message_string.length());
+  // server.print(threshed_value);
+  // server.print(' ');
+  // server.print(standard_dev);
+  // server.print(' ');
+  // server.print(';');
+  // server.print('\n');
+  // server.close();
+  // Serial.print("Written: ");
+  // Serial.println(written);
 
-
-  char* message = new char[100];
-  sprintf(message, "%d %d %f ;\n", sum_swept_data, threshed_value, standard_dev);
-  Serial.println(message);
-  int written = server.print(message);
-  Serial.print("Written: ");
-  Serial.println(written);
-
-  old_sum_normalized = sum_swept_data;
-  delay(1000);
+  // old_sum_normalized = sum_swept_data;
+  delay(100);
 
 
 }
