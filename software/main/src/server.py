@@ -56,9 +56,9 @@ def handle_client(client_socket):
 
 def start_server():
     # Set the server host and port
-    host = '10.1.64.86'
+    host = '192.168.124.6'
 
-    port = 3000
+    port = 13000
     # Create a socket object
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

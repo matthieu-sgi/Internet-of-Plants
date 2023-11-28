@@ -9,6 +9,3 @@ in the development cycle.
 
 More information about PlatformIO Unit Testing:
 - https://docs.platformio.org/en/latest/advanced/unit-testing/index.html
-
-
-Currently the test is testing the function logic using c bindings to python.
