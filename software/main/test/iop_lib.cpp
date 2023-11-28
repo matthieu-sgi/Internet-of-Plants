@@ -33,7 +33,7 @@ float old_sum_normalized;
 float normalized_data[sweep_data_size];
 
 
-float average_custom(float* data, int size){
+float average(float* data, int size){
   float sum = 0;
   for(int i = 0; i < size; i++){
     sum += data[i];
@@ -41,12 +41,12 @@ float average_custom(float* data, int size){
   return sum / size;
 }
 
-void basic_function(int* data, int size){
-  data[0] += 1;
-}
+// void basic_function(int* data, int size){
+//   data[0] += 1;
+// }
 
 void basic_function(float* data, int size){
-  data[0] += 1;
+  data[0] += alpha;
 }
 
 

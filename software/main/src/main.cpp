@@ -38,14 +38,6 @@ float average(int* data, int size){
   return sum / size;
 }
 
-// float average(int** data, int size){
-//   float sum = 0;
-//   for(int i = 0; i < size; i++){
-//     sum += average(data[i], sweep_data_size);
-//   }
-//   return sum / size;
-// }
-
 float average(float* data, int size){
   float sum = 0;
   for(int i = 0; i < size; i++){
