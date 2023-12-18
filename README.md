@@ -53,6 +53,6 @@ This is done in order to do a musical art experience and to go to Ars Electronic
 - [x] Build a prototyping PCB
 - [ ] Build a software embedded synthesizer
 - [ ] Do sonification with the prototyping PCB
-- [ ] Build the "Internet"
+- [X] Build the "Internet"
 - [ ] Build the final PCB
-- [ ] Build the MAX plugin for professional sonification on server
+- [X] Build the MAX plugin for professional sonification on server
