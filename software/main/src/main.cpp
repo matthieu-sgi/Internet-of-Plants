@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include "esp_heap_caps.h"
+#include <iop_maths_lib.h>
 
 
 #define BUFFER_SIZE 400
@@ -9,16 +9,17 @@
 #define MIN_FREQ 100
 #define FREQ_STEP 1
 #define ANALOG_PIN 34
+#define LED_BUILTIN 2
 
-const char* ssid = "UnknownV2";
-const char* password = "UbuntuSUDO";
+const char* ssid = "4D-Space";
+const char* password = "CestPasRFIci42";
 
-const char* host = "192.168.124.6";
+const char* host = "192.168.2.224";
 const int port = 13000;
 
 WiFiClient server; // TCP server  
 
-const float alpha = 0.95;
+const float alpha = 0.99;
 const int sweep_data_size = (MAX_FREQ - MIN_FREQ) / FREQ_STEP;
 int old_sum = 0;
 // float new_standard_dev = 0.0;
@@ -31,46 +32,8 @@ float ema_std[sweep_data_size];
 float old_sum_normalized;
 float normalized_data[sweep_data_size];
 
+unsigned long time_last_msg = millis();
 
-float average(int* data, int size){
-  int sum = 0;
-  for(int i = 0; i < size; i++){
-    sum += data[i];
-  }
-  return sum / size;
-}
-
-float average(float* data, int size){
-  float sum = 0;
-  for(int i = 0; i < size; i++){
-    sum += data[i];
-  }
-  return sum / size;
-}
-
-
-float standard_deviation(float* data, int size, float avg){
-  float sum = 0;
-  for(int i = 0; i < size; i++){
-    sum += pow(data[i] - avg, 2);
-  }
-  return sqrt(sum / size);
-}
-
-void data_normalizer(int* data, int size, float* ema, float* ema_std, float* normalized_data){
-  
-  for(int i = 0; i < size; i++){
-    normalized_data[i] = ((float)(data[i]) - ema[i]) / ema_std[i];
-  }
-}
-
-
-void add_matrix_line(int** matrix, int* line, int size){
-  for(int i = 0; i < size - 1; i++){
-    matrix[i] = matrix[i + 1];
-  }
-  matrix[size - 1] = line;
-}
 
 void setup() {
   // put your setup code here, to run once:
@@ -117,6 +80,8 @@ void setup() {
 
   Serial.println("Setup done");
 
+  pinMode(LED_BUILTIN, OUTPUT);
+
 }
 
 void sweep(int* data, int size){
@@ -130,48 +95,7 @@ void sweep(int* data, int size){
   }
 }
 
-int sum(int* data, int size){
-  int sum = 0;
-  for(int i = 0; i < size; i++){
-    sum += data[i];
-  }
-  return sum;
-}
 
-float sum(float* data, int size){
-  float sum = 0;
-  for(int i = 0; i < size; i++){
-    sum += data[i];
-  }
-  return sum;
-}
-
-
-void ema_update(float* ema, int* data, int size){
-
-  for(int i = 0; i<size; i++){
-    ema[i] = ema[i] * alpha + (1-alpha)*data[i];
-  }
-
-
-}
-
-void ema_std_update(int* data, int size,float* ema_std, float* ema){
-
-
-
-  for (int i = 0; i < size; i++){
-    ema_std[i]= alpha * ema[i] + (data[i]-ema[i]) *(1-alpha);
-  }
-
-
-
-
-}
-
-
-
-size_t full_space = heap_caps_get_total_size(MALLOC_CAP_DEFAULT);
 
 
 void loop() {
@@ -184,59 +108,43 @@ void loop() {
     return;
   }
   server.flush();
-  // analog.read(ANALOG_PIN);
   sweep(swept_data, sweep_data_size);
-  // // new_average = average(swept_data, sweep_data_size);
-  ema_update(ema, swept_data, sweep_data_size);
-  ema_std_update(swept_data, sweep_data_size, ema_std, ema);
+  ema_update(ema, swept_data, sweep_data_size, alpha);
+  ema_std_update(swept_data, sweep_data_size, ema_std, ema, alpha);
 
   data_normalizer(swept_data, sweep_data_size, ema, ema_std, normalized_data);
 
   float avg = average(normalized_data, sweep_data_size);
   float standard_dev = standard_deviation(normalized_data, sweep_data_size,avg);
 
+  int sum_swept_data = int_sum(swept_data, sweep_data_size);
+  float sum_normalized_data = float_sum(normalized_data, sweep_data_size);
+  float diff = abs(sum_normalized_data - old_sum_normalized);
+  int threshed_value =  (diff > 20.0) ? true : false;
 
-  float sum_swept_data = sum(normalized_data, sweep_data_size);
-  float diff = abs(sum_swept_data - old_sum_normalized);
-  int threshed_value =  (diff > 90.0) ? true : false;
-//   // Serial.print("Sum: ");
-//   // Serial.println(sum_swept_data);
-//   // Serial.print("Diff: ");
-//   // Serial.println(diff);
+  String message_string = "0 " + String(sum_normalized_data) + " " + String(threshed_value) + " " + String(standard_dev) + " ;\n";
 
-//   // normalize data
-//   /*
+  if (millis() - time_last_msg > 500 ){
+    digitalWrite(LED_BUILTIN, HIGH);
+    server.write(message_string.c_str(), message_string.length());
+    time_last_msg = millis();
+  }
+  Serial.print("Sum : ");
+  Serial.println(sum_swept_data);
+  Serial.print("Sum normalized sweepts : ");
+  Serial.println(sum_normalized_data);
+  Serial.print("Value 0 : ");
+  Serial.println(swept_data[0]);
+  Serial.print("Emas : ");
+  Serial.println(ema[0]);
+  Serial.print("Emas std : ");
+  Serial.println(ema_std[0]);
 
-//   float anorm = standard_deviation(normalized_data, sweep_data_size);
-// */
-//   float sum_swept_data = 300.123213;
-//   float standard_dev = 300.123213;
-//   bool threshed_value = false;
-  
-  // Serial.print("Full space : ");
-  // heap_caps_print_heap_info(MALLOC_CAP_DEFAULT);
-  // Serial.println(full_space);
-  // Serial.print("free space : ");
-  // Serial.println(ram_usage);
-  // Serial.println("Sum | threshed_value | standard_dev");
-  // std::string message_string = std::to_string(sum_swept_data) + " " + std::to_string(threshed_value) + " " + std::to_string(standard_dev) + " ;\n";
-  String message_string = "0 " + String(sum_swept_data) + " " + String(threshed_value) + " " + String(standard_dev) + " ;\n";
-  // const char* message = message_string.c_str();
-  Serial.println(message_string);
-  // server.print(sum_swept_data);
-  server.write(message_string.c_str(), message_string.length());
-  // server.print(threshed_value);
-  // server.print(' ');
-  // server.print(standard_dev);
-  // server.print(' ');
-  // server.print(';');
-  // server.print('\n');
-  // server.close();
-  // Serial.print("Written: ");
-  // Serial.println(written);
+  Serial.println();
 
-  // old_sum_normalized = sum_swept_data;
-  delay(100);
+  delay(300);
+  old_sum_normalized = sum_normalized_data;
+  digitalWrite(LED_BUILTIN, LOW);
 
 
 }
