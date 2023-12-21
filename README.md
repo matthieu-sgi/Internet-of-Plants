@@ -53,6 +53,9 @@ This is done in order to do a musical art experience and to go to Ars Electronic
 - [x] Build a prototyping PCB
 - [ ] Build a software embedded synthesizer
 - [ ] Do sonification with the prototyping PCB
-- [X] Build the "Internet"
+- [x] Build the "Internet"
 - [ ] Build the final PCB
-- [X] Build the MAX plugin for professional sonification on server
+- [x] Build the PureData patch on server
+- [ ] Check the correlation between humidity and sensor values
+- [ ] play some sound from the micro sd
+- [ ] check on the maths (the EMA is working well, the ema_std not so much)
