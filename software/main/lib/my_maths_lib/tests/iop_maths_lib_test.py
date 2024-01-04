@@ -1,19 +1,29 @@
 import ctypes
+import time
 import matplotlib as plt
 import numpy as np
 
-my_lib = ctypes.CDLL("./libiop.so")
+my_lib = ctypes.CDLL("./iop_maths_lib.so")
 
 SIZE = 200
+BUFFER_SIZE = 100
+ALPHA = 1 - 1/BUFFER_SIZE
+buffer = np.zeros((BUFFER_SIZE,SIZE))
 
-def testing_ema(data, ema) -> list:
+
+def testing_ema(data, ema : list) -> list:
     # ema = np.zeros(SIZE)
-    my_lib.ema.argtypes = [ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_int), ctypes.c_int]
+    # alpha = 0.99 # 1 - 1/100
+    my_lib.ema_update.argtypes = [ctypes.POINTER(ctypes.c_float),
+                           ctypes.POINTER(ctypes.c_int),
+                           ctypes.c_int,
+                           ctypes.c_float]
     # my_lib.ema.restype = ctypes.POINTER(ctypes.c_float)
 
-    c_int_array = (ctypes.c_int*SIZE)(*data)
     c_float_array = (ctypes.c_float*SIZE)(*ema)
-    my_lib.ema_update(c_float_array, c_int_array, SIZE)
+    c_int_array = (ctypes.c_int*SIZE)(*data)
+    c_float_alpha = ctypes.c_float(ALPHA)
+    my_lib.ema_update(c_float_array, c_int_array, SIZE, c_float_alpha)
     # ema = list(c_float_array)
     return list(c_float_array)
 
@@ -22,12 +32,11 @@ def testing_ema_std(data, ema_std, ema) -> list:
                                       ctypes.c_int,
                                       ctypes.POINTER(ctypes.c_float),
                                       ctypes.POINTER(ctypes.c_float)]
-
     c_int_array = (ctypes.c_int*SIZE)(*data)
     c_float_array = (ctypes.c_float*SIZE)(*ema)
     c_float_array_std = (ctypes.c_float*SIZE)(*ema_std)
 
-    my_lib.ema_std_update(c_int_array, SIZE, c_float_array_std, c_float_array )
+    my_lib.ema_std_update(c_int_array, SIZE, c_float_array_std, c_float_array)
 
     return list(c_float_array_std)
 
@@ -115,21 +124,38 @@ if __name__ == '__main__':
                         help='run the while loop',
                         action='store_true')
     if not parser.parse_args().full_run:
-        data = np.random.randint(0,1024, size= SIZE) # Representing the 200 freq from 100khz to 300khz
+        # print('Buffer : ', len(BUFFER))
         ema = np.zeros(SIZE)
         ema_std = np.zeros(SIZE)
-        ema = testing_ema(data,ema)
-        ema_std = testing_ema_std(data, ema_std, ema)
-        normalized_data = testing_normalization(data, ema, ema_std)
+        counter = 0
+        sleep = False
+        while True :
+            random_data = np.random.randint(0,300, size= SIZE) # Representing the 200 freq from 100khz to 300khz
+            # print('random data : ', random_data)
+            ema = testing_ema(random_data, ema)
+            ema_std = testing_ema_std(random_data, ema_std, ema)
+            # print('ema : ', ema)
 
-        print(f'normalized data {normalized_data}')
-        # testing_ema_std(data)
-        # testing_normalization(data)
-        # testing_sum(data)
-        # testing_basic()
-        # testing_avg(data)
-        # testing_std(data)
-        # thalia
+            buffer[counter] = random_data
+            # avg = np.mean(buffer, axis=0)
+            std = np.std(buffer, axis=0)
+            # print('np avg : ', avg)
+            print('np std : ', std)
+
+            diff = abs(ema_std - std)
+            
+            print('diff : ', diff)
+
+            if counter < BUFFER_SIZE-1:
+                counter += 1
+            else:
+                counter = 0
+                sleep = True
+            
+            if sleep:
+                time.sleep(0.1)
+
+
     else:
         print('full run')
         ema = np.zeros(SIZE)
