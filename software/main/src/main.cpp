@@ -1,5 +1,6 @@
 #include <Arduino.h>
-#include <WiFi.h>
+#include <SPI.h>
+#include <SD.h>
 #include <iop_maths_lib.h>
 
 
@@ -8,79 +9,25 @@
 #define MAX_FREQ 300
 #define MIN_FREQ 100
 #define FREQ_STEP 1
-#define ANALOG_PIN 34
+#define ANALOG_PIN 14
 #define LED_BUILTIN 2
+#define HUMIDITY_PIN 27
+#define SD_CS 5
+#define nomDuFichier "sound.wav"
 
-const char* ssid = "4D-Space";
-const char* password = "CestPasRFIci42";
+File monFichier; // Déclaration d'un objet de type File
 
-const char* host = "192.168.2.224";
-const int port = 13000;
-
-WiFiClient server; // TCP server  
-
-const float alpha = 0.99;
 const int sweep_data_size = (MAX_FREQ - MIN_FREQ) / FREQ_STEP;
-int old_sum = 0;
-// float new_standard_dev = 0.0;
-
-float old_standard_dev = 0.0;
-
 int swept_data[sweep_data_size];
-float ema[sweep_data_size];
-float ema_std[sweep_data_size];
-float old_sum_normalized;
-float normalized_data[sweep_data_size];
-
-unsigned long time_last_msg = millis();
-
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-
-  // Wifi connection setup
-
-  WiFi.begin(ssid, password);
-
-  while(WiFi.status() != WL_CONNECTED){
-    delay(500);
-    Serial.println("Connecting to WiFi..");
-  }
-
-  Serial.println("Connected to WiFi network");
-
-  // // // Connect to TCP server
-  if(!server.connect(host, port)){
-    Serial.println("Connection to TCP server failed");
-    return;
-  }
-
-  Serial.println("Connected to TCP server");
-
-  Serial.println("Pins setup");
-  // GPIO setup
+  pinMode(LED_BUILTIN, OUTPUT);
   pinMode(LED_PWM_PIN, OUTPUT);
   pinMode(ANALOG_PIN, INPUT);
-
-  
-
-  // Initialize data array
-  for(int i = 0; i < sweep_data_size; i++){
-    swept_data[i] = 0;
-    ema[i] = 0;
-    ema_std[i] = 1;
-  }
-
-  Serial.println("PWM setup");
-  // Initialize PWM
-  ledcSetup(0, 100000, 2);
-  ledcAttachPin(LED_PWM_PIN, 0);  
-  ledcWrite(0, 2);
-
-  Serial.println("Setup done");
-
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(HUMIDITY_PIN, INPUT);
+  SD.begin(SD_CS);
 
 }
 
@@ -95,56 +42,25 @@ void sweep(int* data, int size){
   }
 }
 
-
-
-
-void loop() {
+void loop(){
   // put your main code here, to run repeatedly:
-
-  if(!server.connected()){
-    Serial.println("Connection to TCP server lost");
-    delay(1000);
-    server.connect(host, port);
-    return;
+  
+  // Serial.print("Humidity: ");
+  // Serial.println(analogRead(HUMIDITY_PIN));
+  monFichier = SD.open(nomDuFichier, FILE_READ);
+  if (monFichier) {
+    Serial.println(F("Affichage du contenu du fichier '" nomDuFichier "', ci-après."));
+    Serial.write("-> Texte présent dans le fichier = ");
+    while (monFichier.available()) {              // Lecture, jusqu'à ce qu'il n'y ait plus rien à lire
+      Serial.write(monFichier.read());            // ... et affichage sur le moniteur série !
+    }
+    monFichier.close();                           // Fermeture du fichier
+    Serial.println(F("Lecture terminée."));
   }
-  server.flush();
-  sweep(swept_data, sweep_data_size);
-  ema_update(ema, swept_data, sweep_data_size, alpha);
-  ema_std_update(swept_data, sweep_data_size, ema_std, ema, alpha);
-
-  data_normalizer(swept_data, sweep_data_size, ema, ema_std, normalized_data);
-
-  float avg = average(normalized_data, sweep_data_size);
-  float standard_dev = standard_deviation(normalized_data, sweep_data_size,avg);
-
-  int sum_swept_data = int_sum(swept_data, sweep_data_size);
-  float sum_normalized_data = float_sum(normalized_data, sweep_data_size);
-  float diff = abs(sum_normalized_data - old_sum_normalized);
-  int threshed_value =  (diff > 20.0) ? true : false;
-
-  String message_string = "0 " + String(sum_normalized_data) + " " + String(threshed_value) + " " + String(standard_dev) + " ;\n";
-
-  if (millis() - time_last_msg > 500 ){
-    digitalWrite(LED_BUILTIN, HIGH);
-    server.write(message_string.c_str(), message_string.length());
-    time_last_msg = millis();
+  else {
+    Serial.println(F("Échec lors de l'ouverture en lecture du fichier '" nomDuFichier "' sur la carte SD !"));
+    while (1);    // Boucle infinie (arrêt du programme)
   }
-  Serial.print("Sum : ");
-  Serial.println(sum_swept_data);
-  Serial.print("Sum normalized sweepts : ");
-  Serial.println(sum_normalized_data);
-  Serial.print("Value 0 : ");
-  Serial.println(swept_data[0]);
-  Serial.print("Emas : ");
-  Serial.println(ema[0]);
-  Serial.print("Emas std : ");
-  Serial.println(ema_std[0]);
-
   Serial.println();
-
-  delay(300);
-  old_sum_normalized = sum_normalized_data;
-  digitalWrite(LED_BUILTIN, LOW);
-
 
 }
