@@ -524,6 +524,10 @@
     [
       "f6e0813d-6916-4822-b423-ed7fb675923e",
       "audio_circuit"
+    ],
+    [
+      "90e0a0f0-fa40-4250-8060-104c41fb6bd0",
+      "micro_sd_circuit"
     ]
   ],
   "text_variables": {}
