@@ -2,6 +2,10 @@
 #include <SPI.h>
 #include <SD.h>
 #include <iop_maths_lib.h>
+#include "AudioTools.h"
+#include "AudioLibs/AudioSourceSD.h"
+#include "AudioCodecs/CodecMP3Helix.h"
+// #include "AudioLibs/MaximilianDSP.h"
 
 
 #define BUFFER_SIZE 400
@@ -13,9 +17,27 @@
 #define LED_BUILTIN 2
 #define HUMIDITY_PIN 27
 #define SD_CS 5
-#define nomDuFichier "sound.wav"
+#define FILENAME "/"
 
-File monFichier; // Déclaration d'un objet de type File
+
+// AudioSourceSD source(FILENAME, ".mp3", SD_CS);
+// I2SStream out;
+AnalogAudioStream out;
+// Maximilian maximilian(out);
+MP3DecoderHelix decoder;
+EncodedAudioStream encoded(&out, &decoder);
+File source;
+StreamCopy copier(encoded, source);
+// AudioPlayer player(source,out, decoder);
+
+
+void printMetaData(MetaDataType type, const char* str, int len){
+  Serial.print("==> ");
+  Serial.print(toStr(type));
+  Serial.print(": ");
+  Serial.println(str);
+}
+
 
 const int sweep_data_size = (MAX_FREQ - MIN_FREQ) / FREQ_STEP;
 int swept_data[sweep_data_size];
@@ -23,11 +45,17 @@ int swept_data[sweep_data_size];
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(LED_PWM_PIN, OUTPUT);
-  pinMode(ANALOG_PIN, INPUT);
-  pinMode(HUMIDITY_PIN, INPUT);
+  AudioLogger::instance().begin(Serial, AudioLogger::Info);
+
+  // setup output
+  auto cfg = out.defaultConfig(TX_MODE);
+
+  out.begin(cfg);
   SD.begin(SD_CS);
+  source = SD.open("/lofi_edit.mp3");
+
+
+  encoded.begin();
 
 }
 
@@ -42,25 +70,12 @@ void sweep(int* data, int size){
   }
 }
 
+// Get time in milliseconds
+unsigned long timing = millis();
+bool played = true;
+float volume = 0.1;
 void loop(){
-  // put your main code here, to run repeatedly:
-  
-  // Serial.print("Humidity: ");
-  // Serial.println(analogRead(HUMIDITY_PIN));
-  monFichier = SD.open(nomDuFichier, FILE_READ);
-  if (monFichier) {
-    Serial.println(F("Affichage du contenu du fichier '" nomDuFichier "', ci-après."));
-    Serial.write("-> Texte présent dans le fichier = ");
-    while (monFichier.available()) {              // Lecture, jusqu'à ce qu'il n'y ait plus rien à lire
-      Serial.write(monFichier.read());            // ... et affichage sur le moniteur série !
-    }
-    monFichier.close();                           // Fermeture du fichier
-    Serial.println(F("Lecture terminée."));
-  }
-  else {
-    Serial.println(F("Échec lors de l'ouverture en lecture du fichier '" nomDuFichier "' sur la carte SD !"));
-    while (1);    // Boucle infinie (arrêt du programme)
-  }
-  Serial.println();
+
+  copier.copy();
 
 }
