@@ -9,10 +9,10 @@ import queue
 
 # Fetching ip address
 
-RECV_HOST = ''
+RECV_HOST = '192.168.10.111'
 RECV_PORT = 3000
 
-SENDER_HOST = 'localhost'
+SENDER_HOST = '192.168.10.111'
 SENDER_PORT = 4000
    
 
@@ -27,13 +27,15 @@ class IOPReceiver:
             self.socket.listen(5)
             self.clients = []
             self.receiving_thread = threading.Thread(target=self._receiving_thread)
-            self.running = False
+            self.running = True
             self.start()
             self.msg_queue = queue.Queue() 
     
         # Receiving thread that put each receiving socket in a thread
         def _receiving_thread(self) -> None:
+            print('Receiving thread started')
             while self.running:
+                print('Waiting for connection')
                 client_socket, addr = self.socket.accept()
                 print('Got connection from', addr)
                 client_thread = threading.Thread(target=self._client_thread, args=(client_socket,addr))
@@ -42,11 +44,13 @@ class IOPReceiver:
                 self.clients.append((client_socket, client_thread))
         
         def _client_thread(self, client_socket : socket.socket, addr : str) -> None:
+            print('Client thread started')
             while self.running:
                 data = client_socket.recv(1024)
                 if data:
-                    # print(data)
+                    print(data)
                     # self.msg_queue.put({addr : data.decode('ascii')})
+
                     self.callback({addr : data.decode('ascii')})
                 else:
                     break
@@ -87,8 +91,10 @@ class IOPModule:
         return self.name
     
     def add_data(self, data : np.ndarray) -> None:
-        self.buffer[:1] = self.buffer[1:]
+        # Shift buffer and add data
+        self.buffer[:-1] = self.buffer[1:]
         self.buffer[-1:] = data
+
 
     def compute(self) -> tuple[float]:
         mean = np.mean(self.buffer, axis=0)
@@ -113,11 +119,22 @@ class IOPSender:
     def __init__(self, *, host : str, port : int) -> None:
         self.host = host
         self.port = port
+        # print('Connecting to', self.host, self.port)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # while True:
+            # try :
+                # self.socket.connect((self.host, self.port))
+                # break
+            # except ConnectionRefusedError:
+                # print('Connection refused')
+
         self.socket.connect((self.host, self.port))
+        print('Connected to', self.host, self.port)
+        self.socket.send('Hello'.encode('ascii'))
+        print('Sent hello')
         self.sending_queue = queue.Queue()
         self.sending_thread = threading.Thread(target=self._sending_thread)
-        self.running = False
+        self.running = True
         self.start()
 
     def _sending_thread(self) -> None:
@@ -148,15 +165,19 @@ class IOPServer:
         self.modules : dict[str : IOPModule] = {}
         self.receiver = IOPReceiver(host=recv_host, port=recv_port, callback=self.callback)
         self.sender = IOPSender(host=sender_host, port=sender_port)
-        self.start()
+        # self.start()
 
 
     def callback(self, data : dict) -> None:
         for addr, msg in data.items():
             values = msg.split(' ')
+            print("Values :", values)
             if addr not in self.modules:
                 self.modules[addr] = IOPModule(addr, name=None)
-            self.modules[addr].add_data(np.array(values, dtype=np.float32))
+            array = np.array(values, dtype=np.float32)
+            print("Array :", array)
+            print("Array shape :", array.shape)
+            self.modules[addr].add_data(array)
             result = self.modules[addr].compute()
             self.sender.send(result)
     
@@ -180,8 +201,8 @@ class IOPServer:
 
 if __name__ == '__main__':
 
-    server = IOPServer()
-    server.start()
+    server = IOPServer(RECV_HOST, RECV_PORT, SENDER_HOST, SENDER_PORT)
+    # server.start()
     while True:
         pass
     ...
