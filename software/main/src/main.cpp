@@ -11,11 +11,11 @@
 #define ANALOG_PIN 34
 #define LED_BUILTIN 2
 
-const char* ssid = "4D-Space";
-const char* password = "CestPasRFIci42";
+const char* ssid = "astGuest";
+const char* password = "Astelcom2022";
 
-const char* host = "192.168.2.224";
-const int port = 13000;
+const char* host = "192.168.10.111";
+const int port = 3000;
 
 WiFiClient server; // TCP server  
 
@@ -109,41 +109,49 @@ void loop() {
   }
   server.flush();
   sweep(swept_data, sweep_data_size);
-  ema_update(ema, swept_data, sweep_data_size, alpha);
-  ema_std_update(swept_data, sweep_data_size, ema_std, ema, alpha);
+  // ema_update(ema, swept_data, sweep_data_size, alpha);
+  // ema_std_update(swept_data, sweep_data_size, ema_std, ema, alpha);
 
-  data_normalizer(swept_data, sweep_data_size, ema, ema_std, normalized_data);
+  // data_normalizer(swept_data, sweep_data_size, ema, ema_std, normalized_data);
 
-  float avg = average(normalized_data, sweep_data_size);
-  float standard_dev = standard_deviation(normalized_data, sweep_data_size,avg);
+  // float avg = average(normalized_data, sweep_data_size);
+  // float standard_dev = standard_deviation(normalized_data, sweep_data_size,avg);
 
-  int sum_swept_data = int_sum(swept_data, sweep_data_size);
-  float sum_normalized_data = float_sum(normalized_data, sweep_data_size);
-  float diff = abs(sum_normalized_data - old_sum_normalized);
-  int threshed_value =  (diff > 20.0) ? true : false;
+  // int sum_swept_data = int_sum(swept_data, sweep_data_size);
+  // float sum_normalized_data = float_sum(normalized_data, sweep_data_size);
+  // float diff = abs(sum_normalized_data - old_sum_normalized);
+  // int threshed_value =  (diff > 20.0) ? true : false;
 
-  String message_string = "0 " + String(sum_normalized_data) + " " + String(threshed_value) + " " + String(standard_dev) + " ;\n";
+  // String message_string = "0 " + String(sum_normalized_data) + " " + String(threshed_value) + " " + String(standard_dev) + " ;\n";
 
   if (millis() - time_last_msg > 500 ){
     digitalWrite(LED_BUILTIN, HIGH);
+    String message_string = "";
+    for(int i=0; i < sweep_data_size; i++){
+      // server.print(swept_data[i]);
+      // server.print(" ");
+      message_string += String(swept_data[i]);
+      message_string = (i == sweep_data_size - 1) ? message_string : message_string + " ";
+    }
+    Serial.println(message_string);
     server.write(message_string.c_str(), message_string.length());
     time_last_msg = millis();
   }
-  Serial.print("Sum : ");
-  Serial.println(sum_swept_data);
-  Serial.print("Sum normalized sweepts : ");
-  Serial.println(sum_normalized_data);
-  Serial.print("Value 0 : ");
-  Serial.println(swept_data[0]);
-  Serial.print("Emas : ");
-  Serial.println(ema[0]);
-  Serial.print("Emas std : ");
-  Serial.println(ema_std[0]);
+  // Serial.print("Sum : ");
+  // Serial.println(sum_swept_data);
+  // Serial.print("Sum normalized sweepts : ");
+  // Serial.println(sum_normalized_data);
+  // Serial.print("Value 0 : ");
+  // Serial.println(swept_data[0]);
+  // Serial.print("Emas : ");
+  // Serial.println(ema[0]);
+  // Serial.print("Emas std : ");
+  // Serial.println(ema_std[0]);
 
-  Serial.println();
+  // Serial.println();
 
   delay(300);
-  old_sum_normalized = sum_normalized_data;
+  // old_sum_normalized = sum_normalized_data;
   digitalWrite(LED_BUILTIN, LOW);
 
 
