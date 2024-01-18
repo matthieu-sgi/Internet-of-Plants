@@ -54,7 +54,7 @@ The software component of this project is responsible for collecting data from t
 
 ## Internet and networking
 
-The PCBs are made out of an ESP32, a MCU that has Wifi capabilities. The ESP32 is connected to a server that runs a MAX patch. The MAX patch is responsible for the sonification of the data.
+The PCBs are made out of an ESP32, a MCU that has Wifi capabilities. The ESP32 is connected to a server that runs a Pure Data. The Pure Data patch is responsible for the sonification of the data.
 This allows to connect several and many plants to the same server and to have a centralized sonification of the data.
 This is done in order to do a musical art experience and to go to Ars Electronica with the project.
 
