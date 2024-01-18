@@ -2,12 +2,12 @@
 
 ## Directory Structure
 
-hardware/
-|-- README.md
-|-- PCB/
-|   |-- [Full KiCad Project Files]
-|-- PCB Devkit/
-|   |-- [Full KiCad Project Files]
+    hardware/
+    |-- README.md
+    |-- PCB/
+    |   |-- [Full KiCad Project Files]
+    |-- PCB Devkit/
+    |   |-- [Full KiCad Project Files]
 
 
 
