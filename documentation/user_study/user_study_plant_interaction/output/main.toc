@@ -1,0 +1,15 @@
+\contentsline {section}{\numberline {I}Introduction}{3}{section.1}%
+\contentsline {section}{\numberline {II}State of the art}{3}{section.2}%
+\contentsline {section}{\numberline {III}Methodology}{4}{section.3}%
+\contentsline {subsection}{\numberline {\mbox {III-A}}Participants}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {\mbox {III-B}}Procedure}{4}{subsection.3.2}%
+\contentsline {subsection}{\numberline {\mbox {III-C}}Materials/Tools}{4}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {\mbox {III-C}1}Dracaena}{4}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {\mbox {III-C}2}Pachira glabra}{4}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {\mbox {III-C}3}Dypsis lutescens}{5}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {\mbox {III-C}4}The experimental space}{5}{subsubsection.3.3.4}%
+\contentsline {section}{\numberline {IV}Data collection}{5}{section.4}%
+\contentsline {section}{\numberline {V}Results}{5}{section.5}%
+\contentsline {section}{\numberline {VI}Discussion}{6}{section.6}%
+\contentsline {section}{\numberline {VII}Conclusion}{7}{section.7}%
+\contentsline {section}{References}{7}{section*.12}%
