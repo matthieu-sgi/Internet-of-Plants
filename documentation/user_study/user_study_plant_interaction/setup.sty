@@ -1,0 +1,77 @@
+ 
+
+%PKG for changing the layout of different elements
+\usepackage[margin=0.75in,headheight=0.45in]{geometry}
+%PKG langage
+%\usepackage[francais]{babel}
+%PKG for multiple figures (subfigure)
+\usepackage[pdftex]{epsfig}
+%PKG for all maths symbole
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+%PKG Extensive control of page headers and footers
+\usepackage{fancyhdr}
+%PKG for improving interface for floating objects
+\usepackage{float}
+%PKG Multiple tables in one column
+\usepackage{threeparttable}
+%PKG for easy production of tables
+\usepackage{booktabs}
+%PKG for comprehensive SI units
+\usepackage{siunitx}
+%PKG Multiple colors
+\usepackage{xcolor}
+
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+%PKG for caption
+\usepackage{caption}
+%PKG for subcaption
+\usepackage{subcaption}
+%PKG for reference
+\usepackage{hyperref}
+
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks=true,
+    frenchlinks=true,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=blue
+} 
+
+\usepackage{soul} % for highlighting
+
+%PKG containing web-related icons (like copyright)
+\usepackage{fontawesome}
+%PKG for specific footnote
+\usepackage{footnote}
+%PKG for specific enumerate
+\usepackage{enumitem}
+
+\usepackage{multirow}
+
+\pagestyle{fancy}
+%\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\rhead{\includegraphics[height=0.3in]{Images/Institutefortechnologies.png}}
+\fancyhead[LO]{\sc User study : Internet of Plants} % shorter form of title to fit in space
+\fancyhead[LE]{\sc User study : Internet of Plants} % author list or et al., to fit in space
+\chead{}
+\cfoot{}
+\rfoot{Page \thepage}
+
+\bibliographystyle{plain}
+
+\title{\vspace{0.2in}Harmony in Bloom: Exploring Human-Plant Interaction for Musical Expression in the Internet of Plants Project}
+
+\author{{Author : SEGUI Matthieu\\
+Contributors : STAS Nicolas, \and BOUFFARD-VERCELLI Diane}
+
+ }
+ 
+ 
+ 
+ \graphicspath{{./Images/}}
