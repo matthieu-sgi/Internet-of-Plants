@@ -3,11 +3,12 @@
 ## Directory Structure
 
 hardware/
-    README.md
-    PCB/
-        Full kicad project
-    PCB Devkit/
-        Full kicad project
+|-- README.md
+|-- PCB/
+|   |-- [Full KiCad Project Files]
+|-- PCB Devkit/
+|   |-- [Full KiCad Project Files]
+
 
 
 Overview
