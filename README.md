@@ -38,6 +38,8 @@ The core concept of the Internet of Plants is to use plants as living sensors. W
     |-- documentation/
     |   |-- poster/
     |   |   |-- [Poster files]
+    |   |-- BOM/ # Bill of Materials
+    |   |   └── pcb_bom_iop_budget.csv # BOM for the PCB and the budget
     |   |-- user_study/
     |   └──   |-- [User study files]
     └── acknowledgements.md
