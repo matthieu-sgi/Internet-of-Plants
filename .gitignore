@@ -34,3 +34,5 @@ fp-info-cache
 .old
 sota_plus
 defense
+
+*.vscode
