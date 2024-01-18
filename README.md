@@ -27,9 +27,21 @@ The core concept of the Internet of Plants is to use plants as living sensors. W
 
 ### Repository Structure
 
-- **PCB Folder:** Contains all the hardware-related files and designs for the PCB (Printed Circuit Board) used in the project.
+    Internet of Plants/
+    |-- README.md
+    |-- software/
+    |   |-- [Software files and source code]
+    |-- hardware/
+    |   |-- [Hardware design files]
+    |-- media/
+    |   |-- [Image files related to the project]
+    |-- documentation/
+    |   |-- poster/
+    |   |   |-- [Poster files]
+    |   |-- user_study/
+    |   └──   |-- [User study files]
+    └── acknowledgements.md
 
-- **Synthesizer Folder:** Here, you can find tests and information related to the sound synthesizer used to convert plant data into sound.
 
 
 ## Hardware
@@ -42,7 +54,7 @@ The software component of this project is responsible for collecting data from t
 
 ## Internet and networking
 
-The PCBs are made out of an ESP32, a MCU that has Wifi capabilities. The ESP32 is connected to a server that runs a MAX patch. The MAX patch is responsible for the sonification of the data.
+The PCBs are made out of an ESP32, a MCU that has Wifi capabilities. The ESP32 is connected to a server that runs a Pure Data. The Pure Data patch is responsible for the sonification of the data.
 This allows to connect several and many plants to the same server and to have a centralized sonification of the data.
 This is done in order to do a musical art experience and to go to Ars Electronica with the project.
 
@@ -51,11 +63,11 @@ This is done in order to do a musical art experience and to go to Ars Electronic
 - [x] Test the electronic filter for the touch interaction
 - [x] Test the sound amplification circuit
 - [x] Build a prototyping PCB
-- [ ] Build a software embedded synthesizer
-- [ ] Do sonification with the prototyping PCB
+- [x] Build a software embedded synthesizer
+- [x] Do sonification with the prototyping PCB
 - [x] Build the "Internet"
 - [ ] Build the final PCB
 - [x] Build the PureData patch on server
 - [ ] Check the correlation between humidity and sensor values
-- [ ] play some sound from the micro sd
+- [x] play some sound from the micro sd
 - [ ] check on the maths (the EMA is working well, the ema_std not so much)
