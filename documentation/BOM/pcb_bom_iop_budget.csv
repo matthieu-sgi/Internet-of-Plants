@@ -1,0 +1,31 @@
+Id,Designator,Footprint,Quantity,Designation,Supplier and ref,Price,Total price
+1,RN1,R_Array_SIP6,1,100kΩ,https://fr.rs-online.com/web/p/reseaux-de-resistances/5223494,0.19 €,0.19 €
+2,J8,PinHeader_1x03_P2.54mm_Vertical,1,jmp_dacs,,,0.00 €
+3,R5,R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,1,10Ω,,,0.00 €
+4,D1,D_DO-34_SOD68_P7.62mm_Horizontal,1,D,,,0.00 €
+5,U1,esp32_breakout,1,esp32_breakout,,10.00 €,10.00 €
+6,U2,DIP-8_W7.62mm_Socket_LongPads,1,LM386,https://fr.rs-online.com/web/p/circuits-integres-amplificateurs-audio/1244528,1.30 €,1.30 €
+7,SW1,SW_PUSH_6mm,1,SW_Push,https://fr.rs-online.com/web/p/interrupteurs-tactiles/4791429,0.10 €,0.10 €
+8,C4,CP_Radial_D8.0mm_P3.80mm,1,100μF,,,0.00 €
+9,"L3,L2,L1",L_Radial_D10.0mm_P5.00mm_Fastron_07P,3,3.3mH,https://www.mouser.fr/ProductDetail/Bourns/RL875S-332K-RC?qs=sGAEpiMZZMug9GoBKXZ75weMDt3RLMc0%2F%252BOzzdnCx54%3D,1.52 €,4.56 €
+10,J2,JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,1,moisture_sensor_conn,,,0.00 €
+11,J5,PinHeader_1x04_P2.54mm_Vertical,1,extended_gpio,,,0.00 €
+12,J1,TerminalBlock_bornier-2_P5.08mm,1,plant_connector,https://fr.rs-online.com/web/p/borniers-pour-circuits-imprimes/7901064,0.69 €,0.69 €
+13,J7,PinHeader_2x04_P2.54mm_Vertical,1,ext_pwr_output,,,0.00 €
+14,"C8,C5",C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,2,10μF,,,0.00 €
+15,J3,TerminalBlock_bornier-2_P5.08mm,1,power_input,https://fr.rs-online.com/web/p/borniers-pour-circuits-imprimes/7901064,0.69 €,0.69 €
+16,"C3,C6",C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,2,10nF,,,0.00 €
+17,C7,CP_Radial_D8.0mm_P3.80mm,1,47μF,,,0.00 €
+18,C2,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,1,1nF,,,0.00 €
+19,J6,TerminalBlock_bornier-2_P5.08mm,1,speaker_output,https://fr.rs-online.com/web/p/borniers-pour-circuits-imprimes/7901064,0.69 €,0.69 €
+20,RV1,Potentiometer_ACP_CA9-V10_Vertical,1,R_Potentiometer,,,0.00 €
+21,R3,R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,1,1MΩ,,,0.00 €
+22,C1,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,1,100pF,,,0.00 €
+23,R4,R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,1,100kΩ,,,0.00 €
+24,R1,R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,1,10kΩ,,,0.00 €
+25,R2,R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,1,4.7kΩ,,,0.00 €
+26,J4,microSD_HC_Hirose_DM3AT-SF-PEJM5,1,micro_sd_slot,https://www.mouser.fr/ProductDetail/Hirose-Connector/DM3AT-SF-PEJM5?qs=LZSZKJVF%252B2WTDKp%252BR7IYAQ%3D%3D,2.45 €,2.45 €
+,,Moisture sensor,1,,https://www.mouser.fr/ProductDetail/Seeed-Studio/101020614?qs=u16ybLDytRZLXly%252BMAdDNQ%3D%3D,6.05 €,6.05 €
+,,PCB fabrication,1,,,40.00 €,40.00 €
+,,,,,,,
+,,TOTAL,,,,,66.73 €
