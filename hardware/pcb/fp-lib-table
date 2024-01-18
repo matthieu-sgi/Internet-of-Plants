@@ -1,3 +1,5 @@
 (fp_lib_table
+  (version 7)
   (lib (name "esp32")(type "KiCad")(uri "${KIPRJMOD}/esp32.pretty")(options "")(descr ""))
+  (lib (name "esp32-s3-wroom")(type "KiCad")(uri "${KIPRJMOD}/lib/esp32-s3-wroom")(options "")(descr ""))
 )
