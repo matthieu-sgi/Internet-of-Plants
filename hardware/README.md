@@ -13,8 +13,8 @@ hardware/
 
 Overview
 
-    PCB: Final version of hardware. Currently in development.
-    PCB Devkit: ESP32 WROOM 32 Devkit for rapid prototyping. First version of hardware. Not in development anymore.
+ - [PCB](https://github.com/matthieu-sgi/Internet-of-Plants/tree/main/hardware/pcb): Final version of hardware. Currently in development.
+ - [PCB Devkit](https://github.com/matthieu-sgi/Internet-of-Plants/tree/main/hardware/pcb_devkit): ESP32 WROOM 32 Devkit for rapid prototyping. First version of hardware. Not in development anymore.
 
 Explore the directories for detailed files and usage instructions. Contributions welcome!
 
