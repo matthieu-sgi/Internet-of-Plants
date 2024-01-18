@@ -18,8 +18,9 @@ The project is structured as follows:
 │   ├── requirements.txt # Contains the python dependencies
 │   ├── main.py # Contains the main python script
 │   └── test/ # Contains the tests│
-└── working_demos # Contains the working demos
-    ├── analog_serial_data/ # Contains the demo that sends analog data through serial and send it ovr socket
-    └── README.md
+└── .other # other stuff
+    ├── tests/ # Old tests
+    └── working_demos/ # Old working demos
+
 
 ```
