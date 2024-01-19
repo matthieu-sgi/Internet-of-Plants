@@ -10,11 +10,12 @@
 #define FREQ_STEP 1
 #define ANALOG_PIN 34
 #define LED_BUILTIN 2
+#define DELAY 50
 
-const char* ssid = "astGuest";
-const char* password = "Astelcom2022";
+const char* ssid = "4D-Space";
+const char* password = "CestPasRFIci42";
 
-const char* host = "192.168.10.111";
+const char* host = "192.168.2.104";
 const int port = 3000;
 
 WiFiClient server; // TCP server  
@@ -41,6 +42,7 @@ void setup() {
 
   // Wifi connection setup
 
+  // Comment 
   WiFi.begin(ssid, password);
 
   while(WiFi.status() != WL_CONNECTED){
@@ -57,6 +59,7 @@ void setup() {
   }
 
   Serial.println("Connected to TCP server");
+  //Uncomment
 
   Serial.println("Pins setup");
   // GPIO setup
@@ -124,15 +127,21 @@ void loop() {
 
   // String message_string = "0 " + String(sum_normalized_data) + " " + String(threshed_value) + " " + String(standard_dev) + " ;\n";
 
-  if (millis() - time_last_msg > 500 ){
+  if (millis() - time_last_msg > DELAY ){
     digitalWrite(LED_BUILTIN, HIGH);
-    String message_string = "";
+    String message_string = "#";
+    String waterfall_string = "";
     for(int i=0; i < sweep_data_size; i++){
       // server.print(swept_data[i]);
       // server.print(" ");
-      message_string += String(swept_data[i]);
-      message_string = (i == sweep_data_size - 1) ? message_string : message_string + " ";
+      // message_string =(swept_data[i] == 0) ? message_string + "0" : message_string + String(swept_data[i]);
+      message_string = message_string + String(swept_data[i]);
+      message_string = (i < sweep_data_size-1) ?  message_string + " " : message_string;
+      // waterfall_string =(swept_data[i] == 0) ? waterfall_string + "0" : waterfall_string + String(swept_data[i]);
+      // waterfall_string = ( i > 0 && i < sweep_data_size-1) ? waterfall_string : waterfall_string + ",";
     }
+    // Serial.println(message_string);
+    message_string = message_string + ";\n";
     Serial.println(message_string);
     server.write(message_string.c_str(), message_string.length());
     time_last_msg = millis();
@@ -150,7 +159,7 @@ void loop() {
 
   // Serial.println();
 
-  delay(300);
+  // delay(300);
   // old_sum_normalized = sum_normalized_data;
   digitalWrite(LED_BUILTIN, LOW);
 
