@@ -21,17 +21,29 @@ class IOPModule:
     
     def add_data(self, data : np.ndarray) -> None:
         # Shift buffer and add data
-        self.buffer[:-1] = self.buffer[1:]
-        self.buffer[-1:] = data
+        try : 
+            self.buffer[:-1] = self.buffer[1:]
+            self.buffer[-1,:] = data
+        except ValueError:
+            print("Data shape :", data.shape)
+            print("Data : ", data)
+            print("Buffer shape :", self.buffer.shape)
+            print("Buffer :", self.buffer)
+            # exit(1)
+
 
 
     def compute(self) -> tuple[float]:
         mean = np.mean(self.buffer, axis=0)
         std = np.std(self.buffer, axis=0)
 
+        # print("Mean :", mean)
+        # print("Std :", std)
+
+        
         processed = np.square((self.buffer - mean) / std)
 
-        summed = np.sum(processed[-1], axis=0)
+        summed = np.sum(processed[-1])
 
         if self.old_sum == -1:
             self.old_sum = summed
@@ -40,5 +52,11 @@ class IOPModule:
 
         self.old_sum = summed
 
-        return (summed, int(abs(diff)>90))
+        # summed = summed if summed > 100 else 0
+
+        diff_modif = abs(diff)
+        # print("Diff :", diff_modif)
+
+        anorm = np.std(self.buffer[-1])
+        return (summed, int(diff_modif>90), anorm)
 

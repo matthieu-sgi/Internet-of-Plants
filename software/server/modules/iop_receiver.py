@@ -38,10 +38,17 @@ class IOPReceiver:
             while self.running:
                 data = client_socket.recv(1024)
                 if data:
-                    # print(data)
+                    print("Length data", len(data))
+                    decoded_data = data.decode('ascii')
+                    if decoded_data.startswith('#') and decoded_data.endswith(';\n'):
+                        decoded_data = decoded_data[1:-2]
+                        print("data", decoded_data)
                     # self.msg_queue.put({addr : data.decode('ascii')})
-
-                    self.callback({addr : data.decode('ascii')})
+                        # print('Received data :', decoded_data)
+                        self.callback({addr : decoded_data})
+                    else:
+                        print('Received data is not valid')
+                        
                 else:
                     break
             client_socket.close()

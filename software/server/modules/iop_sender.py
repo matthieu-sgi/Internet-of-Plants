@@ -36,8 +36,8 @@ class IOPSender:
     def send(self, data : tuple[float]) -> None:
         msg = ' '.join([str(x) for x in data])
         msg += ';\n'
-        print(msg)
-        self.sending_queue.put(msg.encode('utf-8'))
+        # print(msg)
+        self.sending_queue.put(msg.encode())
 
     def start(self) -> None:
         self.sending_thread.start()

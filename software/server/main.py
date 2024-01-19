@@ -4,10 +4,10 @@ from modules.iop_server import IOPServer
 
 # Fetching ip address
 
-RECV_HOST = '192.168.10.111'
+RECV_HOST = '192.168.2.104'
 RECV_PORT = 3000
 
-SENDER_HOST = RECV_HOST
+SENDER_HOST = 'localhost'
 SENDER_PORT = 4000
    
        
