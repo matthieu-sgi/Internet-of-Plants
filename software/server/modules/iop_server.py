@@ -19,12 +19,12 @@ class IOPServer:
     def callback(self, data : dict) -> None:
         for addr, msg in data.items():
             values = msg.split(' ')
-            print("Values :", values)
+            # print("Values :", values)
             if addr not in self.modules:
                 self.modules[addr] = IOPModule(addr, name=None)
             array = np.array(values, dtype=np.float32)
-            print("Array :", array)
-            print("Array shape :", array.shape)
+            # print("Array :", array)
+            # print("Array shape :", array.shape)
             self.modules[addr].add_data(array)
             result = self.modules[addr].compute()
             self.sender.send(result)

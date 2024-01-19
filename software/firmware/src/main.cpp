@@ -10,11 +10,12 @@
 #define FREQ_STEP 1
 #define ANALOG_PIN 34
 #define LED_BUILTIN 2
+#define DELAY 100
 
-const char* ssid = "astGuest";
-const char* password = "Astelcom2022";
+const char* ssid = "4D-Space";
+const char* password = "CestPasRFIci42";
 
-const char* host = "192.168.10.111";
+const char* host = "192.168.2.224";
 const int port = 3000;
 
 WiFiClient server; // TCP server  
@@ -124,7 +125,7 @@ void loop() {
 
   // String message_string = "0 " + String(sum_normalized_data) + " " + String(threshed_value) + " " + String(standard_dev) + " ;\n";
 
-  if (millis() - time_last_msg > 500 ){
+  if (millis() - time_last_msg > DELAY ){
     digitalWrite(LED_BUILTIN, HIGH);
     String message_string = "";
     for(int i=0; i < sweep_data_size; i++){
@@ -150,7 +151,7 @@ void loop() {
 
   // Serial.println();
 
-  delay(300);
+  // delay(300);
   // old_sum_normalized = sum_normalized_data;
   digitalWrite(LED_BUILTIN, LOW);
 

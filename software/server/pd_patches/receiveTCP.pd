@@ -20,7 +20,6 @@
 #X obj 180 120 unpack f f f;
 #X obj 290 250 sel 1;
 #X obj 180 250 osc~;
-#X floatatom 240 300 5 0 0 0 - - - 0;
 #X obj 180 290 *~;
 #X obj 130 80 netreceive 4000 0;
 #X connect 2 0 3 0;
@@ -41,8 +40,7 @@
 #X connect 17 1 14 0;
 #X connect 17 2 15 0;
 #X connect 18 0 13 0;
-#X connect 19 0 21 0;
-#X connect 20 0 21 1;
-#X connect 21 0 1 0;
-#X connect 22 0 0 0;
-#X connect 22 0 17 0;
+#X connect 19 0 20 0;
+#X connect 20 0 1 0;
+#X connect 21 0 0 0;
+#X connect 21 0 17 0;

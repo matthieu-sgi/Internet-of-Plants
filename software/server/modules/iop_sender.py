@@ -21,7 +21,7 @@ class IOPSender:
 
         self.socket.connect((self.host, self.port))
         print('Connected to', self.host, self.port)
-        self.socket.send('Hello'.encode('ascii'))
+        self.socket.send('Hello;\n'.encode('ascii'))
         print('Sent hello')
         self.sending_queue = queue.Queue()
         self.sending_thread = threading.Thread(target=self._sending_thread)
@@ -35,6 +35,8 @@ class IOPSender:
         
     def send(self, data : tuple[float]) -> None:
         msg = ' '.join([str(x) for x in data])
+        msg += ';\n'
+        print(msg)
         self.sending_queue.put(msg.encode('utf-8'))
 
     def start(self) -> None:

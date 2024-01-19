@@ -7,7 +7,7 @@ from modules.iop_server import IOPServer
 RECV_HOST = '192.168.10.111'
 RECV_PORT = 3000
 
-SENDER_HOST = '192.168.10.111'
+SENDER_HOST = RECV_HOST
 SENDER_PORT = 4000
    
        

@@ -38,7 +38,7 @@ class IOPReceiver:
             while self.running:
                 data = client_socket.recv(1024)
                 if data:
-                    print(data)
+                    # print(data)
                     # self.msg_queue.put({addr : data.decode('ascii')})
 
                     self.callback({addr : data.decode('ascii')})

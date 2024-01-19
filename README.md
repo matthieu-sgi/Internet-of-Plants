@@ -73,3 +73,4 @@ This is done in order to do a musical art experience and to go to Ars Electronic
 - [ ] Check the correlation between humidity and sensor values
 - [x] play some sound from the micro sd
 - [ ] check on the maths (the EMA is working well, the ema_std not so much)
+- [ ] develop web gui for the esp32 (to change the wifi network)

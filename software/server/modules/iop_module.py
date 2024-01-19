@@ -40,5 +40,5 @@ class IOPModule:
 
         self.old_sum = summed
 
-        return (diff, summed)
+        return (summed, int(abs(diff)>90))
 
