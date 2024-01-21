@@ -5,6 +5,15 @@ if [ "$EUID" -ne 0 ]; then
     exit
 fi
 
+# check if pure data is installed
+if ! command -v pd >/dev/null 2>&1; then
+    echo "Please install Pure Data first."
+    exit
+fi
+
+# install the requirements.txt
+pip3 install -r requirements.txt
+
 
 # Get the current directory of the script
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
