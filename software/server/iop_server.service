@@ -1,0 +1,15 @@
+[Unit]
+
+Description=IOP Server main service
+After=network-online.target
+
+[Service]
+
+Type=simple
+
+ExecStart=/mnt/data/Internet_of_plants/software/server/start.sh
+ExecStop=/bin/killall pd
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,4 +1,5 @@
 numpy
 queue
-threading
 socket
+sys
+threading
