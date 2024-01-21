@@ -60,6 +60,10 @@ The PCBs are made out of an ESP32, a MCU that has Wifi capabilities. The ESP32 i
 This allows to connect several and many plants to the same server and to have a centralized sonification of the data.
 This is done in order to do a musical art experience and to go to Ars Electronica with the project.
 
+## Deployment
+
+Refer to [deployment.md](https://github.com/matthieu-sgi/Internet-of-Plants/blob/main/deployment.md).
+
 ## Roadmap
 
 - [x] Test the electronic filter for the touch interaction
