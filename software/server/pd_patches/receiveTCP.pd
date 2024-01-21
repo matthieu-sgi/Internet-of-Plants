@@ -10,7 +10,7 @@
 #X floatatom 580 480 5 0 0 0 - - - 0;
 #X floatatom 520 410 5 0 0 0 - - - 0;
 #X obj 440 450 -~;
-#X floatatom 510 360 5 0 0 0 - - - 0;
+#X floatatom 507 367 5 0 0 0 - - - 0;
 #X obj 446 396 *~;
 #X obj 320 300 bng 25 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc
 #000000 #000000;
@@ -20,8 +20,10 @@
 #X obj 180 120 unpack f f f;
 #X obj 290 250 sel 1;
 #X obj 180 250 osc~;
-#X obj 180 290 *~;
 #X obj 130 80 netreceive 4000 0;
+#X obj 649 408 *~;
+#X msg 389 49 \; pd dsp 1;
+#X obj 389 21 loadbang;
 #X connect 2 0 3 0;
 #X connect 3 0 4 0;
 #X connect 4 0 12 0;
@@ -40,7 +42,7 @@
 #X connect 17 1 14 0;
 #X connect 17 2 15 0;
 #X connect 18 0 13 0;
-#X connect 19 0 20 0;
-#X connect 20 0 1 0;
-#X connect 21 0 0 0;
-#X connect 21 0 17 0;
+#X connect 19 0 1 0;
+#X connect 20 0 0 0;
+#X connect 20 0 17 0;
+#X connect 23 0 22 0;
