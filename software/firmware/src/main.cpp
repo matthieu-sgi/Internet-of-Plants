@@ -12,8 +12,8 @@
 #define LED_BUILTIN 2
 #define DELAY 50
 
-// const char* ssid = "4D-Space";
-// const char* password = "CestPasRFIci42";
+const char* ssid = <SSID>;
+const char* password = <PASSWORD>;
 
 
 const char* host = "192.168.10.111";
