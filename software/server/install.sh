@@ -18,6 +18,9 @@ pip3 install -r requirements.txt
 # Get the current directory of the script
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
+# Update the start script with the current script directory
+sed -i "s|<path>|$SCRIPT_DIR|" "$SCRIPT_DIR/start.sh"
+
 # Define the systemd service file path
 SERVICE_FILE="$SCRIPT_DIR/iop_server.service"
 
