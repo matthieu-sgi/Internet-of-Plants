@@ -20,6 +20,6 @@ def signal_handler(sig, frame):
 
 if __name__ == '__main__':
     server = IOPServer(RECV_HOST, RECV_PORT, SENDER_HOST, SENDER_PORT)
-    signal.signal(signal.SIGTERM, server.signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
     while True:
         pass
