@@ -10,8 +10,8 @@
 
 ### Instructions
 
-Go to the folder `software/firmware/src/`.
-Modify the 'main.cpp' file to set the correct Wifi credentials and server ip.
+Go to the folder `software/firmware/`.
+Modify the 'src/main.cpp' file to set the correct Wifi credentials and server ip.
 
 Then run the following command:
 
