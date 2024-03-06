@@ -7,7 +7,7 @@ After=network-online.target
 
 Type=simple
 
-ExecStart=/mnt/data/Internet_of_plants/software/server/start.sh
+ExecStart=<path>/start.sh
 ExecStop=/bin/killall pd
 Restart=on-failure
 
