@@ -38,3 +38,14 @@ or
 ```
 
 This script will install the required Python packages and create and enable the server.service.
+
+### Troubleshooting
+
+In some cases, the service may need to be used as user and not root in order to have the correct authorizations and access. If you are in this situation, move: `~/etc/systemd/system/iop_server.service` to `~/user/systemd/system/`
+
+And, to run the project, use:
+
+```bash
+systemctl --user start iop_server
+
+```
