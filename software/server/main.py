@@ -10,7 +10,7 @@ import sys
 RECV_HOST = '0.0.0.0'
 RECV_PORT = 3000
 
-SENDER_HOST = 'localhost'
+SENDER_HOST = '0.0.0.0'
 SENDER_PORT = 4000
    
        
@@ -19,6 +19,7 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 if __name__ == '__main__':
+        
     server = IOPServer(RECV_HOST, RECV_PORT, SENDER_HOST, SENDER_PORT)
     signal.signal(signal.SIGTERM, signal_handler)
     while True:

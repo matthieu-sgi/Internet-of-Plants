@@ -8,7 +8,6 @@ import numpy as np
 import queue
 import threading
 
-
 class IOPServer:
 
     def __init__(self, recv_host : str, recv_port : int, sender_host : str, sender_port : int) -> None:
@@ -39,9 +38,8 @@ class IOPServer:
                 self.sender.send(result)
 
 
-    def callback(self, data : dict) -> None:
+    def callback(self, data : dict) -> None:        
         self.queue.put(data)
-        
     
     def stop(self) -> None:
         self.running = False

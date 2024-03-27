@@ -7,7 +7,7 @@ After=network-online.target
 
 Type=simple
 
-ExecStart=/mnt/data/Internet_of_plants/software/server/start.sh
+ExecStart=/home/auriane/Documents/IoP/Internet-of-Plants/software/server/start.sh
 ExecStop=/bin/killall pd
 Restart=on-failure
 

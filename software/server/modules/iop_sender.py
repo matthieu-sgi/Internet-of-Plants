@@ -4,6 +4,8 @@ import queue
 import socket
 import threading
 
+from typing import Tuple
+
 
 class IOPSender:
 
@@ -20,9 +22,10 @@ class IOPSender:
                 # print('Connection refused')
 
         self.socket.connect((self.host, self.port))
+        
         print('Connected to', self.host, self.port)
         self.socket.send('Hello;\n'.encode('ascii'))
-        print('Sent hello')
+        print('Sent Hello')
         self.sending_queue = queue.Queue()
         self.sending_thread = threading.Thread(target=self._sending_thread)
         self.running = True
@@ -33,10 +36,13 @@ class IOPSender:
             data = self.sending_queue.get()
             self.socket.send(data)
         
-    def send(self, data : tuple[float]) -> None:
+    def send(self, data : Tuple[float]) -> None:
         msg = ' '.join([str(x) for x in data])
         msg += ';\n'
-        # print(msg)
+        print(msg)
+        # with open('pd_data.txt', 'a') as f:
+        #     f.write(msg)
+        #     f.write('\n')
         self.sending_queue.put(msg.encode())
 
     def start(self) -> None:
@@ -45,7 +51,6 @@ class IOPSender:
     def stop(self) -> None:
         self.running = False
         self.sending_thread.join(timeout=1)
-
 
     def close(self) -> None:
         self.socket.close()

@@ -1,4 +1,5 @@
 ''''''
+from typing import Tuple
 
 import numpy as np
 
@@ -12,6 +13,7 @@ class IOPModule:
         self.max_freq = max_freq
         self.buffer = np.zeros((buffer_size, self.max_freq - self.min_freq), dtype=np.float32)
         self.old_sum = -1
+        
 
     def get_addr(self) -> int:
         return self.addr
@@ -33,7 +35,7 @@ class IOPModule:
 
 
 
-    def compute(self) -> tuple[float]:
+    def compute(self) -> Tuple[float]:
         mean = np.mean(self.buffer, axis=0)
         std = np.std(self.buffer, axis=0)
 

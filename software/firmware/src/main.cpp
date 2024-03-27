@@ -12,11 +12,13 @@
 #define LED_BUILTIN 2
 #define DELAY 50
 
-const char* ssid = "4D-Space";
-const char* password = "CestPasRFIci42";
+// const char* ssid = "4D-Space";
+// const char* password = "CestPasRFIci42";
+const char* ssid = "osiris";
+const char* password = "lesuperponey";
 
 
-const char* host = "192.168.2.224";
+const char* host = "192.168.208.72";
 const int port = 3000;
 
 WiFiClient server; // TCP server  
