@@ -15,7 +15,7 @@ I would like to express my gratitude to the following individuals and communitie
 
 ## Others
 
-- [DVIC/IFT](https://dvic.devinci.fr/) - For providing the resources and support needed to complete this project.
+- [IFT](https://ift.devinci.fr/) - For providing the resources and support needed to complete this project.
 
 
 Your support has been crucial to the success of this project. Thank you for being a part of this journey!
