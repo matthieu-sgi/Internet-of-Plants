@@ -36,3 +36,6 @@ sota_plus
 defense
 
 *.vscode
+
+start.sh
+iop_service.service
