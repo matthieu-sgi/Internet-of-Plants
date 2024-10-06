@@ -44,5 +44,5 @@ if [ -f "$SERVICE_FILE_TEMPLATE" ]; then
 
     echo "Service installed, enabled, and started successfully."
 else
-    echo "Error: Service file not found at $SERVICE_FILE."
+    echo "Error: Service file template not found at \"$SERVICE_FILE_TEMPLATE\"."
 fi
