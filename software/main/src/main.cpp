@@ -9,7 +9,6 @@
 #include "AudioLibs/FileLoop.h"
 // #include "AudioLibs/MaximilianDSP.h"
 
-
 #define BUFFER_SIZE 400
 #define LED_PWM_PIN 17
 #define MAX_FREQ 300
@@ -20,7 +19,6 @@
 #define HUMIDITY_PIN 27
 #define SD_CS 5
 #define FILENAME "/sound.wav"
-
 
 // AudioSourceSD source(FILENAME, ".mp3", SD_CS);
 // I2SStream out;
@@ -39,36 +37,36 @@ EncodedAudioStream encoded(&out, &decoder);
 StreamCopy copier(encoded, source);
 // AudioPlayer player(source,out, decoder);
 
-
-void printMetaData(MetaDataType type, const char* str, int len){
+void printMetaData(MetaDataType type, const char *str, int len)
+{
   Serial.print("==> ");
   Serial.print(toStr(type));
   Serial.print(": ");
   Serial.println(str);
 }
 
-
 const int sweep_data_size = (MAX_FREQ - MIN_FREQ) / FREQ_STEP;
 int swept_data[sweep_data_size];
 
-auto tremolo = new Tremolo(200,0.5,44100);
+auto tremolo = new Tremolo(200, 0.5, 44100);
 auto pitch_shift = new PitchShift(3, 1024);
 
-void setup() {
+void setup()
+{
   // put your setup code here, to run once:
   Serial.begin(115200);
-  AudioLogger::instance().begin(Serial, AudioLogger::Info);
+  // AudioLogger::instance().begin(Serial, AudioLogger::Info);
 
   // effects.addEffect(dly);
   // setup output
   // effects.addEffect(tremolo);
   // effects.addEffect(new Distortion(4000));
   // effects.addEffect(pitch_shift);
-  audio_tools::AnalogConfigESP32 cfg = out.defaultConfig(TX_MODE);
-  
-  cfg.sample_rate = 8000;
-  cfg.channels = 2;
-  cfg.bits_per_sample = 16;
+  // audio_tools::AnalogConfigESP32 cfg = out.defaultConfig(TX_MODE);
+
+  // cfg.sample_rate = 8000;
+  // cfg.channels = 2;
+  // cfg.bits_per_sample = 16;
   // cfg.bitrate = 256;
   // vol.begin();
   // vol.setVolume(0.5);
@@ -76,26 +74,31 @@ void setup() {
   // cfg.pitch_shift = 1.5;
   // cfg.buffer_size = 1024;
   // pitchShift.begin(cfg);
-  SD.begin(SD_CS);
-  source.setFile(SD.open("/music.wav"));
+  // SD.begin(SD_CS);
+  // source.setFile(SD.open("/music.wav"));
   // source = SD.open("/lofi_edit.mp3");
 
-
-
   // effects.begin(cfg);
-  encoded.begin();
-  out.begin(cfg);
+  // encoded.begin();
+  // out.begin(cfg);
   // effects.begin(info);
-  
+
+  pinMode(LED_PWM_PIN, OUTPUT);
+  pinMode(ANALOG_PIN, INPUT);
+  ledcSetup(0, 100000, 2);
+  ledcAttachPin(LED_PWM_PIN, 0);
+  ledcWrite(0, 2);
 }
 
-void sweep(int* data, int size){
+void sweep(int *data, int size)
+{
   int value = 0;
-  for(int index = 0; index < size; index += FREQ_STEP){
+  for (int index = 0; index < size; index += FREQ_STEP)
+  {
     value = analogRead(ANALOG_PIN);
     data[index] = value;
     int freq = MIN_FREQ + index * FREQ_STEP;
-    ledcChangeFrequency(0, freq*1000, 2);
+    ledcChangeFrequency(0, freq * 1000, 2);
     delayMicroseconds(10);
   }
 }
@@ -107,35 +110,40 @@ float volume = 0.1;
 float counter = 1.0;
 int max_humidity = 2500;
 int min_humidity = 1850;
-void loop(){
+void loop()
+{
 
-   if(millis() - timing > 1000){
-    timing = millis();
-    // Serial.println("1 second");
-    // Serial.println(volume);
-    // // volume =(volume < 1) ? volume + 0.1 : 0.1;
+  //  if(millis() - timing > 1000){
+  //   timing = millis();
+  //   // Serial.println("1 second");
+  //   // Serial.println(volume);
+  //   // // volume =(volume < 1) ? volume + 0.1 : 0.1;
 
-    // // vol.setVolume(volume);
-    // Serial.println(volume);
-    // Serial.println("1 second");
-    //CHANGE TREMOLO
-    // counter = (counter < 1000) ? counter + 500 : 500;
-    counter+= 0.5;
-    // Serial.println(counter);
-    // pitch_shift->setValue(counter);
-    // tremolo->setDuration(counter);
-   }
-  int read = analogRead(HUMIDITY_PIN);
-  Serial.print("Humidity: ");
-  Serial.println(read);
-  int value = map(read, min_humidity, max_humidity, 1, 100);
-  float input_value = ((float)(value))/10;
-  Serial.print("Input value: ");
-  input_value = (input_value <= 1) ? 1 : input_value;
-  Serial.println(input_value);
-  // pitch_shift->setValue(input_value);
-  if (!copier.copy()){
+  //   // // vol.setVolume(volume);
+  //   // Serial.println(volume);
+  //   // Serial.println("1 second");
+  //   //CHANGE TREMOLO
+  //   // counter = (counter < 1000) ? counter + 500 : 500;
+  //   counter+= 0.5;
+  //   // Serial.println(counter);
+  //   // pitch_shift->setValue(counter);
+  //   // tremolo->setDuration(counter);
+  //  }
+  // int read = analogRead(HUMIDITY_PIN);
+  // Serial.print("Humidity: ");
+  // Serial.println(read);
+  // int value = map(read, min_humidity, max_humidity, 1, 100);
+  // float input_value = ((float)(value))/10;
+  // Serial.print("Input value: ");
+  // input_value = (input_value <= 1) ? 1 : input_value;
+  // Serial.println(input_value);
+  // // pitch_shift->setValue(input_value);
+  // if (!copier.copy()){
 
-  }
-
+  // }
+  sweep(swept_data, sweep_data_size);
+  // digitalWrite(LED_PWM_PIN, HIGH);
+  // delay(1000);
+  // digitalWrite(LED_PWM_PIN , LOW);
+  // delay(1000);
 }
