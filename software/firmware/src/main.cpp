@@ -2,7 +2,6 @@
 #include <WiFi.h>
 #include <iop_maths_lib.h>
 
-
 #define BUFFER_SIZE 400
 #define LED_PWM_PIN 17
 #define MAX_FREQ 300
@@ -12,14 +11,13 @@
 #define LED_BUILTIN 2
 #define DELAY 50
 
-const char* ssid = "4D-Space";
-const char* password = "CestPasRFIci42";
+const char *ssid = "UnknownAPv2";
+const char *password = "UbuntuSUDO";
 
-
-const char* host = "192.168.2.224";
+const char *host = "192.168.200.106";
 const int port = 3000;
 
-WiFiClient server; // TCP server  
+WiFiClient server; // TCP server
 
 const float alpha = 0.99;
 const int sweep_data_size = (MAX_FREQ - MIN_FREQ) / FREQ_STEP;
@@ -36,17 +34,18 @@ float normalized_data[sweep_data_size];
 
 unsigned long time_last_msg = millis();
 
-
-void setup() {
+void setup()
+{
   // put your setup code here, to run once:
   Serial.begin(115200);
 
   // Wifi connection setup
 
-  // Comment 
+  // Comment
   WiFi.begin(ssid, password);
 
-  while(WiFi.status() != WL_CONNECTED){
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.println("Connecting to WiFi..");
   }
@@ -54,23 +53,23 @@ void setup() {
   Serial.println("Connected to WiFi network");
 
   // // // Connect to TCP server
-  if(!server.connect(host, port)){
+  if (!server.connect(host, port))
+  {
     Serial.println("Connection to TCP server failed");
     return;
   }
 
   Serial.println("Connected to TCP server");
-  //Uncomment
+  // Uncomment
 
   Serial.println("Pins setup");
   // GPIO setup
   pinMode(LED_PWM_PIN, OUTPUT);
   pinMode(ANALOG_PIN, INPUT);
 
-  
-
   // Initialize data array
-  for(int i = 0; i < sweep_data_size; i++){
+  for (int i = 0; i < sweep_data_size; i++)
+  {
     swept_data[i] = 0;
     ema[i] = 0;
     ema_std[i] = 1;
@@ -79,33 +78,35 @@ void setup() {
   Serial.println("PWM setup");
   // Initialize PWM
   ledcSetup(0, 100000, 2);
-  ledcAttachPin(LED_PWM_PIN, 0);  
+  ledcAttachPin(LED_PWM_PIN, 0);
   ledcWrite(0, 2);
 
   Serial.println("Setup done");
 
   pinMode(LED_BUILTIN, OUTPUT);
-
 }
 
-void sweep(int* data, int size){
+void sweep(int *data, int size)
+{
   int value = 0;
-  for(int index = 0; index < size; index += FREQ_STEP){
+  for (int index = 0; index < size; index += FREQ_STEP)
+  {
     value = analogRead(ANALOG_PIN);
     data[index] = value;
     int freq = MIN_FREQ + index * FREQ_STEP;
-    ledcChangeFrequency(0, freq*1000, 2);
+    ledcChangeFrequency(0, freq * 1000, 2);
     delayMicroseconds(10);
   }
 }
 
+int counter = 0;
 
-
-
-void loop() {
+void loop()
+{
   // put your main code here, to run repeatedly:
 
-  if(!server.connected()){
+  if (!server.connected())
+  {
     Serial.println("Connection to TCP server lost");
     delay(1000);
     server.connect(host, port);
@@ -128,16 +129,18 @@ void loop() {
 
   // String message_string = "0 " + String(sum_normalized_data) + " " + String(threshed_value) + " " + String(standard_dev) + " ;\n";
 
-  if (millis() - time_last_msg > DELAY ){
+  if (counter < 100 && millis() - time_last_msg > DELAY)
+  {
     digitalWrite(LED_BUILTIN, HIGH);
     String message_string = "#";
     String waterfall_string = "";
-    for(int i=0; i < sweep_data_size; i++){
+    for (int i = 0; i < sweep_data_size; i++)
+    {
       // server.print(swept_data[i]);
       // server.print(" ");
       // message_string =(swept_data[i] == 0) ? message_string + "0" : message_string + String(swept_data[i]);
       message_string = message_string + String(swept_data[i]);
-      message_string = (i < sweep_data_size-1) ?  message_string + " " : message_string;
+      message_string = (i < sweep_data_size - 1) ? message_string + " " : message_string;
       // waterfall_string =(swept_data[i] == 0) ? waterfall_string + "0" : waterfall_string + String(swept_data[i]);
       // waterfall_string = ( i > 0 && i < sweep_data_size-1) ? waterfall_string : waterfall_string + ",";
     }
@@ -146,6 +149,8 @@ void loop() {
     Serial.println(message_string);
     server.write(message_string.c_str(), message_string.length());
     time_last_msg = millis();
+    counter++;
+    digitalWrite(LED_BUILTIN, LOW);
   }
   // Serial.print("Sum : ");
   // Serial.println(sum_swept_data);
@@ -162,7 +167,4 @@ void loop() {
 
   // delay(300);
   // old_sum_normalized = sum_normalized_data;
-  digitalWrite(LED_BUILTIN, LOW);
-
-
 }
